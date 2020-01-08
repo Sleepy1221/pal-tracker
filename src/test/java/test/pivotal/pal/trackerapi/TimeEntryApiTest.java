@@ -4,7 +4,6 @@ import com.jayway.jsonpath.DocumentContext;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import io.pivotal.pal.tracker.PalTrackerApplication;
 import io.pivotal.pal.tracker.TimeEntry;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -27,8 +27,15 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(classes = PalTrackerApplication.class, webEnvironment = RANDOM_PORT)
 public class TimeEntryApiTest {
 
-    @BeforeAll
-    public static void setUp() throws Exception {
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private final long projectId = 123L;
+    private final long userId = 456L;
+    private TimeEntry timeEntry = new TimeEntry(projectId, userId, LocalDate.parse("2017-01-08"), 8);
+
+    @BeforeEach
+    public void setUp() throws Exception {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUrl(System.getenv("SPRING_DATASOURCE_URL"));
 
@@ -37,13 +44,6 @@ public class TimeEntryApiTest {
 
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    private final long projectId = 123L;
-    private final long userId = 456L;
-    private TimeEntry timeEntry = new TimeEntry(projectId, userId, LocalDate.parse("2017-01-08"), 8);
-
 
     @Test
     public void testCreate() throws Exception {
