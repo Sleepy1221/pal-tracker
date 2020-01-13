@@ -8,6 +8,7 @@ import io.pivotal.pal.tracker.EnvController;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EnvControllerTest {
+
     @Test
     public void getEnv() throws Exception {
         EnvController controller = new EnvController(
@@ -18,7 +19,6 @@ public class EnvControllerTest {
         );
 
         Map<String, String> env = controller.getEnv();
-
         assertThat(env.get("PORT")).isEqualTo("8675");
         assertThat(env.get("MEMORY_LIMIT")).isEqualTo("12G");
         assertThat(env.get("CF_INSTANCE_INDEX")).isEqualTo("34");
