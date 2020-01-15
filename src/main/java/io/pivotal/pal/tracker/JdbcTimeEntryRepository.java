@@ -54,6 +54,7 @@ public class JdbcTimeEntryRepository implements TimeEntryRepository {
     public List<TimeEntry> list() {
         ResultSetExtractor<TimeEntry> test;
         return jdbcTemplate.query("SELECT id, project_id, user_id, date, hours FROM time_entries", mapper);
+
     }
 
     @Override
